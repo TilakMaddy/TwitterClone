@@ -6,9 +6,18 @@ const server = app.listen(port, () => {
   console.log("Listening on " + port);
 });
 
+
+app.set("view engine", "pug");
+app.set("views", "views");
+
 app.get('/', (req, res, next) => {
 
+  var payload = {
+    pageTitle: "Homee"
+  }
+
   res.status(200)
-    .send("Hello !");
+    .render("home", payload);
 
 })
+
