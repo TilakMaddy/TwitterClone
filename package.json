@@ -1,0 +1,17 @@
+{
+  "name": "twitterclone",
+  "version": "1.0.0",
+  "description": "Twitter Clone using Node JS, Mongo DB and Socket IO ",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "Twitter"
+  ],
+  "author": "Tilak Maddy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
