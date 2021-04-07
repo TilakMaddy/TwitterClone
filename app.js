@@ -1,15 +1,18 @@
 const express = require('express')
 const app = express()
-const port = 3003;
-const middleware = require('./middleware');
+const port = 3003
+const middleware = require('./middleware')
+const path = require('path')
 
 const server = app.listen(port, () => {
   console.log("Listening on " + port);
 });
 
 
-app.set("view engine", "pug");
-app.set("views", "views");
+app.set("view engine", "pug")
+app.set("views", "views")
+
+app.use(express.static(path.join(__dirname, "public")))
 
 // Routes
 const loginRoute = require('./routes/loginRoutes')
