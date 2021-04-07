@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../schemas/UserSchema')
+const bcrypt = require('bcrypt')
 
 router.get('/', (req, res, next) => {
 
@@ -58,8 +59,13 @@ router.post('/', async (req, res, next) => {
 
       // New user -> ok ! Go and register !!!
 
+      var data = req.body
+      data.password = await bcrypt.hash(password, 10) // we want the untrimmed version
 
+      const newUser = await User.create(data)
+      req.session.user = newUser
 
+      return res.redirect('/')
     }
 
   } else {

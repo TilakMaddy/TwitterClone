@@ -40,9 +40,7 @@ const UserSchema = new Schema({
     default: "/images/profilePic.png"
   }
 
-
-})
-
+}, { timestamps: true }) // createdAt, updatedAt field is automatically added
 
 var User = mongoose.model('User', UserSchema)
 module.exports = User
