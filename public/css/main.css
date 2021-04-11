@@ -1,0 +1,50 @@
+:root {
+  --blue: #1fa2f1;
+}
+
+a, a:hover {
+
+  color: inherit;
+
+}
+
+nav {
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 100%;
+
+}
+
+nav a {
+
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  font-size: 30px;
+  width: 55px;
+  height: 55px;
+  text-decoration: none !important;
+
+}
+
+nav a.blue {
+
+  color: var(--blue);
+
+}
+
+nav a:hover {
+
+  background: #d4edff;
+  color: var(--blue);
+  border-radius: 50%;
+
+}
+
+.mainSectionContainer {
+
+
+
+}
