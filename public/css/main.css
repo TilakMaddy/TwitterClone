@@ -5,6 +5,10 @@
   --blueLight: #9bd1f9;
 }
 
+* {
+  outline: none !important;
+}
+
 a, a:hover {
 
   color: inherit;
