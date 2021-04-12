@@ -37,7 +37,7 @@ const UserSchema = new Schema({
 
   profilePic: {
     type: String,
-    default: "/images/profilePic.png"
+    default: "/images/profilePic.jpg"
   }
 
 }, { timestamps: true }) // createdAt, updatedAt field is automatically added
