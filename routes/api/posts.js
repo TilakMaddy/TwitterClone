@@ -3,6 +3,17 @@ const router = express.Router()
 const User = require('../../schemas/UserSchema')
 const Post = require('../../schemas/PostSchema')
 
+router.get("/", async (req, res, next) => {
+
+  var posts = await Post.find()
+    .populate("postedBy")
+    .sort({"createdAt": -1})
+    .catch(e =>  {console.log(e);res.sendStatus(400) })
+
+  res.status(200).send(posts)
+
+});
+
 router.post('/', async (req, res, next) => {
 
   if(!req.body.content) {
