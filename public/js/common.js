@@ -61,6 +61,36 @@ $(document).on('click', '.likeButton', e => {
 
 });
 
+
+$(document).on('click', '.retweet', e => {
+
+  var button = $(e.target);
+  var postId = getPostIdFromElement(button);
+
+  if(undefined === postId)
+    return alert("post id undefined !");
+
+  // console.log("Liking post with id", postId);
+
+  $.ajax({
+    url: `/api/posts/${postId}/retweet`,
+    type: "post",
+    success: (postData) => {
+
+
+      button.find('span').text(postData.retweetUsers.length || "");
+
+      if(postData.retweetUsers.includes(userLoggedIn._id)) {
+        button.addClass('active')
+      } else {
+        button.removeClass('active')
+      }
+
+    }
+  })
+
+});
+
 function getPostIdFromElement(element) {
   var isRoot = element.hasClass('post')
   var rootElement = isRoot ? element : element.closest('.post');
@@ -104,6 +134,13 @@ function timeDifference(current, previous) {
 
 function createPostHtml(postData) {
 
+  if(postData == null)
+    return console.log("postData is null");
+
+  var isRetweet = postData.retweetData !== undefined;
+  var retweetedBy = isRetweet ? postData.postedBy.username : null;
+  postData = isRetweet ? postData.retweetData : postData;
+
   var postedBy = postData.postedBy;
 
   if(postedBy._id === undefined) {
@@ -112,7 +149,9 @@ function createPostHtml(postData) {
 
   var displayName = postedBy.firstName + " " + postedBy.lastName;
   var timestamp = timeDifference(new Date(), new Date(postData.createdAt))
+
   var likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? 'active': "";
+  var retweetButtonActiveClass = postData.retweetUsers.includes(userLoggedIn._id) ? 'active': "";
 
   return `
     <div class="post" data-id="${postData._id}">
@@ -138,8 +177,9 @@ function createPostHtml(postData) {
               </button>
             </div>
             <div class="postButtonContainer green">
-              <button class='retweet'>
+              <button class='retweet ${retweetButtonActiveClass}'>
                 <i class="fas fa-retweet"> </i>
+                <span> ${postData.retweetUsers.length || ""} </span>
               </button>
             </div>
             <div class="postButtonContainer red">

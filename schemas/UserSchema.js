@@ -40,7 +40,9 @@ const UserSchema = new Schema({
     default: "/images/profilePic.jpg"
   },
 
-  likes: [{type: Schema.Types.ObjectId, ref: 'Post'}]
+  likes: [{type: Schema.Types.ObjectId, ref: 'Post'}],
+
+  retweets: [{type: Schema.Types.ObjectId, ref: 'Post'}]
 
 }, { timestamps: true }) // createdAt, updatedAt field is automatically added
 
