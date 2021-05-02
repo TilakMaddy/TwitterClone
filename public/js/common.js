@@ -1,9 +1,11 @@
-
-$('#postTextarea').on('keyup', e => {
+$('#postTextarea, #replyTextarea').on('keyup', e => {
   var textbox = $(e.target)
   var val = textbox.val().trim()
 
-  var submitButton = $("#submitPostButton");
+  var isModal = textbox.parents(".modal").length === 1;
+
+
+  var submitButton = isModal ? $("#submitReplyButton") : $("#submitPostButton");
 
   if(val == "") {
     submitButton.prop('disabled', true)

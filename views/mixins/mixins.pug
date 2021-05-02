@@ -15,7 +15,13 @@ mixin createReplyModal(userLoggedIn)
           h5#replyModalLabel.modal-title Reply
           button.close(type='button', data-dismiss='modal', aria-label='Close')
             span(aria-hidden='true') &times;
+
         .modal-body
+          .postFormContainer
+            .userImageContainer
+              img(src=userLoggedIn.profilePic, alt="User's profile picture")
+            .textareaContainer
+              textarea#replyTextarea(placeholder="What's flippin duckers ?")
 
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Close
