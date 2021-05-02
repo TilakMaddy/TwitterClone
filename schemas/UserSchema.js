@@ -38,7 +38,9 @@ const UserSchema = new Schema({
   profilePic: {
     type: String,
     default: "/images/profilePic.jpg"
-  }
+  },
+
+  likes: [{type: Schema.Types.ObjectId, ref: 'Post'}]
 
 }, { timestamps: true }) // createdAt, updatedAt field is automatically added
 
