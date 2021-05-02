@@ -41,6 +41,39 @@ router.post('/', async (req, res, next) => {
 
 })
 
+router.put('/:id/like', async (req, res, next) => {
+
+  var postId = req.params.id;
+  var userId = req.session.user._id;
+
+  var isLiked = req.session.user.likes?.includes(postId);
+
+  // mongo db variables - pull , addToSet
+  // (instead of resetting the field, we add/remove one item from the likes array)
+  var option = isLiked ? "$pull" : "$addToSet";
+
+  // update like on user object
+  req.session.user = await User.findByIdAndUpdate
+    (userId, { [option] : { likes: postId } }, { new: true}) // return the newly updated object
+  .catch(e => {
+    console.log(e)
+    res.sendStatus(400);
+  })
+
+
+  // update like on Post
+  var post = await Post.findByIdAndUpdate
+    (postId, { [option] : { likes: userId } }, { new: true}) // return the newly updated object
+  .catch(e => {
+    console.log(e)
+    res.sendStatus(400);
+  })
+
+
+  res.status(200).send(post);
+
+});
+
 module.exports = router;
 
 
