@@ -4,7 +4,6 @@ $('#postTextarea, #replyTextarea').on('keyup', e => {
 
   var isModal = textbox.parents(".modal").length === 1;
 
-
   var submitButton = isModal ? $("#submitReplyButton") : $("#submitPostButton");
 
   if(val == "") {
@@ -15,21 +14,40 @@ $('#postTextarea, #replyTextarea').on('keyup', e => {
   submitButton.prop('disabled', false)
 })
 
-$('#submitPostButton').on('click', e => {
+$('#submitPostButton, #submitReplyButton').on('click', e => {
 
   var button = $(e.target)
-  var textbox = $("#postTextarea")
+  var isModal = button.parents(".modal").length === 1;
+  var textbox = isModal ? $("#replyTextarea") : $("#postTextarea");
+
 
   var data = {
     content: textbox.val()
   }
 
+  if(isModal) {
+    var id = button.data().id;
+
+    if(id == null)
+      return alert("Button has null id !")
+
+    data.replyTo = id;
+
+  }
+
 
   $.post("/api/posts", data, (postData, status, xhr) => {
+
+    if(postData.replyTo) {
+      location.reload()
+      return;
+    }
+
     var html = createPostHtml(postData)
     $(".postsContainer").prepend(html)
     textbox.val("");
     button.prop('disabled', true)
+
   })
 
 })
@@ -37,6 +55,10 @@ $('#submitPostButton').on('click', e => {
 $("#replyModal").on("show.bs.modal", (e) => {
   var button = $(e.relatedTarget);
   var postId = getPostIdFromElement(button);
+
+
+  $("#submitReplyButton").attr("data-id", postId)
+
 
   $.get(`api/posts/${postId}`, result => {
     outputPosts(result, $("#originalPostContainer"))
@@ -194,6 +216,21 @@ function createPostHtml(postData) {
     `;
   }
 
+  var replyFlag = "";
+
+  if(postData.replyTo) {
+
+    if(!postData.replyTo._id) {
+      return alert(" replyTo is not populated ");
+    }
+
+    var replyToUsername = postData.replyTo.postedBy.username
+    replyFlag = `<div class='replyFlag'>
+      Replying to <a href='/profile/${replyToUsername }'>@${replyToUsername}</a>
+    </div>`
+
+  }
+
   return `
     <div class="post" data-id="${postData._id}">
       <div class="postActionContainer">
@@ -211,6 +248,7 @@ function createPostHtml(postData) {
             <span class="username">@${postedBy.username}</span>
             <span class="date">${timestamp}</span>
           </div>
+          ${replyFlag}
           <div class='postBody'>
             <span> ${postData.content} </span>
           </div>

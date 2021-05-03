@@ -25,6 +25,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
 
+
   if(!req.body.content) {
     console.log("No data received to posts api");
     return res.sendStatus(400)
@@ -34,6 +35,11 @@ router.post('/', async (req, res, next) => {
     content: req.body.content,
     postedBy: req.session.user
   }
+
+  if(req.body.replyTo) {
+    postData.replyTo = req.body.replyTo;
+  }
+
 
   var newPost = await Post.create(postData)
     .catch(err => {
@@ -139,9 +145,11 @@ async function getPosts(filter) {
   var posts = await Post.find(filter)
     .populate("postedBy")
     .populate("retweetData")
+    .populate("replyTo")
     .sort({"createdAt": -1})
     .catch(e => console.log(e))
 
+  posts = await User.populate(posts, { path: "replyTo.postedBy"})
   return await User.populate(posts, { path: "retweetData.postedBy" })
 
 }
