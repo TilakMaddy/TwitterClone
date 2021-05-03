@@ -34,6 +34,19 @@ $('#submitPostButton').on('click', e => {
 
 })
 
+$("#replyModal").on("show.bs.modal", (e) => {
+  var button = $(e.relatedTarget);
+  var postId = getPostIdFromElement(button);
+
+  $.get(`api/posts/${postId}`, result => {
+    outputPosts(result, $("#originalPostContainer"))
+  })
+
+})
+
+$("#replyModal")
+  .on("hidden.bs.modal", () => $("#originalPostContainer").html(""))
+
 
 $(document).on('click', '.likeButton', e => {
 
@@ -133,6 +146,24 @@ function timeDifference(current, previous) {
       return Math.round(elapsed/msPerYear ) + ' years ago';
   }
 }
+
+function outputPosts(results, container) {
+  container.html("")
+
+  if(!Array.isArray(results)) {
+    results = [results]
+  }
+
+  results.forEach(r => {
+    var html = createPostHtml(r)
+    container.append(html)
+  });
+
+  if(results.length === 0) {
+    container.append("<span class='noresults'> Nothing to show <span>")
+  }
+}
+
 
 function createPostHtml(postData) {
 
