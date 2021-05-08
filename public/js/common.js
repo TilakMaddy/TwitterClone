@@ -60,8 +60,8 @@ $("#replyModal").on("show.bs.modal", (e) => {
   $("#submitReplyButton").attr("data-id", postId)
 
 
-  $.get(`api/posts/${postId}`, result => {
-    outputPosts(result, $("#originalPostContainer"))
+  $.get(`/api/posts/${postId}`, result => {
+    outputPosts(result.postData, $("#originalPostContainer"))
   })
 
 })
@@ -288,4 +288,26 @@ function createPostHtml(postData) {
       </div>
     </div>
   `;
+}
+
+
+function outputPostsWithReplies(results, container) {
+  container.html("")
+
+  if(results.replyTo !== undefined && results.replyTo._id !== undefined) {
+    var html = createPostHtml(results.replyTo)
+    container.append(html)
+
+  }
+
+  var html = createPostHtml(results.postData)
+  container.append(html)
+
+
+  results.replies.forEach(r => {
+    var html = createPostHtml(r)
+    container.append(html)
+  });
+
+
 }

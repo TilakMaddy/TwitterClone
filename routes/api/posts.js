@@ -15,8 +15,16 @@ router.get("/:id", async (req, res, next) => {
 
   var id = req.params.id;
 
-  var results = await getPosts({ _id: id });
-  [results] = results;
+  var postData = await getPosts({ _id: id });
+  [postData] = postData;
+
+  var results = { postData }
+
+  if(postData.replyTo !== undefined) {
+    results.replyTo = postData.replyTo
+  }
+
+  results.replies = await getPosts({ replyTo : id })
 
   res.status(200).send(results)
 
