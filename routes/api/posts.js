@@ -67,6 +67,7 @@ router.put('/:id/like', async (req, res, next) => {
   // (instead of resetting the field, we add/remove one item from the likes array)
   var option = isLiked ? "$pull" : "$addToSet";
 
+
   // update like on user object
   req.session.user = await User.findByIdAndUpdate
     (userId, { [option] : { likes: postId } }, { new: true}) // return the newly updated object
@@ -88,7 +89,6 @@ router.put('/:id/like', async (req, res, next) => {
   res.status(200).send(post);
 
 });
-
 
 
 router.post('/:id/retweet', async (req, res, next) => {
@@ -150,6 +150,10 @@ async function getPosts(filter) {
     .catch(e => console.log(e))
 
   posts = await User.populate(posts, { path: "replyTo.postedBy"})
+
+
+  // posts = await User.populate(posts, { path: "retweetData.replyTo.postedBy"}).catch(e => {})
+
   return await User.populate(posts, { path: "retweetData.postedBy" })
 
 }
