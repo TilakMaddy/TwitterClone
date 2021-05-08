@@ -199,7 +199,7 @@ function outputPosts(results, container) {
 }
 
 
-function createPostHtml(postData) {
+function createPostHtml(postData, largeFont = false) {
 
   if(postData == null)
     return console.log("postData is null");
@@ -230,17 +230,24 @@ function createPostHtml(postData) {
 
   var replyFlag = "";
 
-  if(postData.replyTo) {
+  if(postData.replyTo && postData.replyTo._id) {
 
-    if(!postData.replyTo._id) {
-      return alert(" replyTo is not populated ");
-    }
 
     var replyToUsername = postData.replyTo.postedBy.username
     replyFlag = `<div class='replyFlag'>
       Replying to <a href='/profile/${replyToUsername }'>@${replyToUsername}</a>
     </div>`
 
+  }
+
+  var buttons = "";
+
+  if(postData.postedBy. _id == userLoggedIn._id) {
+    buttons = `
+      <button data-id='${postData._id}' data-toggle='modal' data-target='#deletePostModal'>
+        <i class='fas fa-times'> </i>
+      </button>
+    `;
   }
 
   return `
@@ -259,6 +266,7 @@ function createPostHtml(postData) {
             </a>
             <span class="username">@${postedBy.username}</span>
             <span class="date">${timestamp}</span>
+            ${buttons}
           </div>
           ${replyFlag}
           <div class='postBody'>
@@ -300,7 +308,7 @@ function outputPostsWithReplies(results, container) {
 
   }
 
-  var html = createPostHtml(results.postData)
+  var html = createPostHtml(results.postData, true)
   container.append(html)
 
 

@@ -244,3 +244,11 @@ button span {
 .replyFlag a {
   color: var(--blue)
 }
+
+.postContentContainer .header {
+  display: flex;
+}
+
+.postContentContainer .header .date {
+  flex: 1;
+}
