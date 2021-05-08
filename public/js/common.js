@@ -70,6 +70,24 @@ $("#replyModal")
   .on("hidden.bs.modal", () => $("#originalPostContainer").html(""))
 
 
+$("#deletePostModal").on("show.bs.modal", (e) => {
+  var button = $(e.relatedTarget);
+  var postId = getPostIdFromElement(button);
+
+  $("#deletePostButton").attr("data-id", postId)
+})
+
+$("#deletePostButton").click((e) => {
+  var id = $(e.target).data("id")
+
+  $.ajax({
+    url: `/api/posts/${id}`,
+    type: "delete",
+    success: () => location.reload()
+  })
+
+})
+
 $(document).on('click', '.likeButton', e => {
 
   var button = $(e.target);
