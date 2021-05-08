@@ -7,7 +7,7 @@ router.get('/:id', (req, res, next) => {
     pageTitle: "View Post",
     userLoggedIn: req.session.user,
     userLoggedInJs: JSON.stringify(req.session.user),
-    postId: req.params.postId
+    postId: req.params.id
   }
 
   res.status(200)
