@@ -6,7 +6,12 @@ block content
     span.errorMessage Check the URL you are trying to access
 
   else
-    span #{profileUser.firstName}
+    .profileHeaderContainer
+      .coverPhotoContainer
+
+        .userImageContainer
+          img(src=profileUser.profilePic, alt="user profile picture ")
+
     .postsContainer
     +createPostModals(userLoggedIn)
 
