@@ -10,7 +10,6 @@ router.get("/", async (req, res, next) => {
 
 });
 
-
 router.get("/:id", async (req, res, next) => {
 
   var id = req.params.id;
@@ -29,7 +28,6 @@ router.get("/:id", async (req, res, next) => {
   res.status(200).send(results)
 
 });
-
 
 router.post('/', async (req, res, next) => {
 
@@ -98,7 +96,6 @@ router.put('/:id/like', async (req, res, next) => {
 
 });
 
-
 router.post('/:id/retweet', async (req, res, next) => {
 
   var postId = req.params.id;
@@ -147,6 +144,14 @@ router.post('/:id/retweet', async (req, res, next) => {
 
 });
 
+router.delete("/:id", async (req, res, next) => {
+  Post.findByIdAndDelete(req.params.id)
+    .then(() => res.sendStatus(202))
+    .catch(e => {
+      console.log(e);
+      res.sendStatus(400)
+    })
+})
 
 async function getPosts(filter) {
 

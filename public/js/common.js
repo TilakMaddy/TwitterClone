@@ -83,7 +83,9 @@ $("#deletePostButton").click((e) => {
   $.ajax({
     url: `/api/posts/${id}`,
     type: "delete",
-    success: () => location.reload()
+    success: (data, status, xhr) => {
+      location.reload()
+    }
   })
 
 })
@@ -219,12 +221,12 @@ function outputPosts(results, container) {
 
 function createPostHtml(postData, largeFont = false) {
 
-  if(postData == null)
-    return console.log("postData is null");
-
   var isRetweet = postData.retweetData !== undefined;
   var retweetedBy = isRetweet ? postData.postedBy.username : null;
   postData = isRetweet ? postData.retweetData : postData;
+
+  if(!postData)
+    return console.log("postData is null");
 
   var postedBy = postData.postedBy;
 
