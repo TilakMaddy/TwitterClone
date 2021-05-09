@@ -1,17 +1,24 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../../schemas/UserSchema')
-const Post = require('../../schemas/PostSchema')
+const Post = require('../../schemas/PostSchema');
 
 router.get("/", async (req, res, next) => {
 
   var searchObj = req.query;
+  console.log(searchObj)
 
-  if(searchObj.isReply !== undefined) {
-    var isReply = searchObj.isReply === true;
-    searchObj.replyTo = { $exists: isReply }; // mongoDB operator $exists
+  if(searchObj.isReply !== undefined && searchObj.isReply === 'false') {
+    searchObj.replyTo = { $exists: false }; // mongoDB operator $exists
     delete searchObj.isReply;
   }
+
+
+  if(searchObj.isReply !== undefined && searchObj.isReply === 'true') {
+    searchObj.replyTo = { $exists: true }; // mongoDB operator $exists
+    delete searchObj.isReply;
+  }
+
 
   var results = await getPosts(searchObj)
   res.status(200).send(results)

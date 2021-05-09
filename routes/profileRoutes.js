@@ -29,6 +29,19 @@ router.get('/:uname', async (req, res, next) => {
 })
 
 
+router.get('/:uname/replies', async (req, res, next) => {
+
+  // uname can be username or id => both will be resolved
+
+  var payload = await getPayload(req.params.uname, req.session.user)
+  payload.selectedTab = "replies";
+
+  res.status(200)
+    .render("profilePage", payload);
+
+})
+
+
 async function getPayload(username, userLoggedIn) {
 
   var user = (await User.findOne({ username }) ) ||
