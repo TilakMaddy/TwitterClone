@@ -10,6 +10,9 @@ block content
       var profileUserId = '!{profileUser._id}';
       var selectedTab = '!{selectedTab}';
 
+    - followersCount = profileUser.followers.length
+    - followingCount = profileUser.following.length
+
     .profileHeaderContainer
       .coverPhotoContainer
 
@@ -17,10 +20,15 @@ block content
           img(src=profileUser.profilePic, alt="user profile picture ")
 
       .profileButtonsContainer
-        if profileUser._id = userLoggedIn._id
+        if profileUser._id != userLoggedIn._id
           a.profileButton(href=`/messages/${profileUser._id}`)
             i.fas.fa-envelope
-          +createFollowButton(userLoggedIn, false)
+
+          - var profileUserId = profileUser._id.toString()
+          - if(userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
+              +createFollowButton(profileUser, true)
+          - else
+              +createFollowButton(profileUser, false)
 
       .userDetailsContainer
         span.displayName #{profileUser.firstName} #{profileUser.lastName}
@@ -29,11 +37,11 @@ block content
 
         .followersContainer
           a(href=`/profile/${profileUser.username}/following`)
-            span.value #{0}
+            span.value #{followingCount}
             span Following
 
           a(href=`/profile/${profileUser.username}/followers`)
-            span.value #{0}
+            span#followersValue.value #{followersCount}
             span Followers
 
     .tabsContainer
