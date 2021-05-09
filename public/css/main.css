@@ -64,6 +64,10 @@ nav a:hover {
 
 }
 
+.wrapper > .row {
+  margin: 0;
+}
+
 button{
   background: transparent;
   border: none;

@@ -42,9 +42,13 @@ const UserSchema = new Schema({
 
   likes: [{type: Schema.Types.ObjectId, ref: 'Post'}],
 
-  retweets: [{type: Schema.Types.ObjectId, ref: 'Post'}]
+  retweets: [{type: Schema.Types.ObjectId, ref: 'Post'}],
 
-}, { timestamps: true }) // createdAt, updatedAt field is automatically added
+  following: [{type: Schema.Types.ObjectId, ref: 'User'}],
+
+  followers: [{type: Schema.Types.ObjectId, ref: 'User'}],
+
+}, { timestamps : true }) // createdAt, updatedAt field is automatically added
 
 var User = mongoose.model('User', UserSchema)
 module.exports = User
