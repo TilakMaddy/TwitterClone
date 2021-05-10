@@ -1,5 +1,5 @@
 $(document).ready(() => {
-  $.get("/api/posts", { followingOnly: true }, results => {
+  $.get("/api/posts", results => {
     outputPosts(results, $(".postsContainer"))
   })
 })
