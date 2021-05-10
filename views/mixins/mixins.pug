@@ -60,7 +60,7 @@ mixin createTab(name, href, isSelected)
   a(href=href, class=className)
     span #{name}
 
-mixin createImageUploadModal( )
+mixin createImageUploadModal()
   #imageUploadModal.modal.fade(tabindex='-1', aria-labelledby='imageUploadModalLabel', aria-hidden='true')
     .modal-dialog
       .modal-content
@@ -78,3 +78,24 @@ mixin createImageUploadModal( )
         .modal-footer
           button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
           button#imageUploadButton.btn.btn-primary(type='button') Save
+
+
+
+mixin coverPhotoUploadModal()
+  #coverPhotoUploadModal.modal.fade(tabindex='-1', aria-labelledby='coverPhotoModalLabel', aria-hidden='true')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5#imageUploadModalLabel.modal-title Upload a cover photo
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') &times;
+
+        .modal-body
+          input#coverPhoto(type="file", name="coverPhoto")
+
+          .imagePreviewContainer
+            img#coverPreview
+
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+          button#coverPhotoButton.btn.btn-primary(type='button') Save

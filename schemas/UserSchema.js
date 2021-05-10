@@ -40,6 +40,10 @@ const UserSchema = new Schema({
     default: "/images/profilePic.jpg"
   },
 
+  coverPhoto: {
+    type: String
+  },
+
   likes: [{type: Schema.Types.ObjectId, ref: 'Post'}],
 
   retweets: [{type: Schema.Types.ObjectId, ref: 'Post'}],

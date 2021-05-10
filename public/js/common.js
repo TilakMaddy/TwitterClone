@@ -144,6 +144,60 @@ $("#imageUploadButton").click(() => {
 
   })
 
+})
+
+$("#coverPhotoButton").click(() => {
+
+  var canvas = cropper.getCroppedCanvas();
+
+  if(canvas == null) {
+    alert("couldnt upload image !")
+    return;
+  }
+
+  canvas.toBlob((blob) => {
+    var formData = new FormData();
+    formData.append("croppedImage", blob)
+
+    $.ajax({
+      url: "/api/users/coverPicture",
+      type: "post",
+      data: formData,
+      processData: false, // prevents jquery from converting data to string
+      contentType: false, // no content-type header added, boundary string
+
+      success: () => {
+        location.reload();
+      }
+    })
+
+  })
+
+})
+
+
+$("#coverPhoto").change(e => {
+
+  var [input] = $(e.target)
+
+  if(input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = (e) => {
+
+      var image = document.getElementById("coverPreview");
+      image['src'] = e.target.result;
+
+      if(cropper !== undefined) {
+        cropper.destroy()
+      }
+
+      cropper = new Cropper(image, {
+        aspectRatio: 16 / 9 ,
+        background: false
+      })
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
 
 })
 
