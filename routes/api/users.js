@@ -93,6 +93,30 @@ router.post("/profilePicture", upload.single("croppedImage") , async (req, res, 
 
 })
 
+router.get("/", async (req, res, next) => {
+
+  var searchObj = req.query;
+
+  if(req.query.search !== undefined) {
+    searchObj = {
+      $or: [
+        { firstName: { $regex: req.query.search, $options: "i" } } ,
+        { lastName: { $regex: req.query.search, $options: "i" } } ,
+        { username: { $regex: req.query.search, $options: "i" } } ,
+      ]
+    }
+  }
+
+  User.find(searchObj)
+    .then(results => {
+      res.status(200).send(results)
+    })
+    .catch(e => {
+      console.log(e)
+      res.sendStatus(400)
+    })
+
+})
 
 router.post("/coverPicture", upload.single("croppedImage") , async (req, res, next) => {
 
