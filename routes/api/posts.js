@@ -123,6 +123,28 @@ router.put('/:id/like', async (req, res, next) => {
 
 });
 
+router.put('/:id', async (req, res, next) => {
+
+  if(req.body.pinned !== undefined) {
+    await Post.updateMany({ postedBy: req.session.user }, { pinned : false})
+    .catch(e => {
+      console.log(e)
+      res.sendStatus(400)
+    })
+  }
+
+
+  Post.findByIdAndUpdate(req.params.id, req.body)
+    .then(() => res.sendStatus(204))
+    .catch(e => {
+      console.log(e)
+      res.sendStatus(400)
+    })
+
+
+});
+
+
 router.post('/:id/retweet', async (req, res, next) => {
 
   var postId = req.params.id;

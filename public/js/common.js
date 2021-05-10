@@ -79,6 +79,52 @@ $("#deletePostModal").on("show.bs.modal", (e) => {
   $("#deletePostButton").attr("data-id", postId)
 })
 
+$("#confirmPinModal").on("show.bs.modal", (e) => {
+  var button = $(e.relatedTarget);
+  var postId = getPostIdFromElement(button);
+
+  $("#pinPostButton").attr("data-id", postId)
+})
+
+
+$("#unpinModal").on("show.bs.modal", (e) => {
+  var button = $(e.relatedTarget);
+  var postId = getPostIdFromElement(button);
+
+  $("#unpinPostButton").attr("data-id", postId)
+})
+
+
+$("#pinPostButton").click((e) => {
+  var id = $(e.target).data("id")
+
+  $.ajax({
+    url: `/api/posts/${id}`,
+    type: "put",
+    data: { pinned: true },
+    success: (data, status, xhr) => {
+      location.reload()
+    }
+  })
+
+})
+
+
+$("#unpinPostButton").click((e) => {
+  var id = $(e.target).data("id")
+
+  $.ajax({
+    url: `/api/posts/${id}`,
+    type: "put",
+    data: { pinned: false },
+    success: (data, status, xhr) => {
+      location.reload()
+    }
+  })
+
+})
+
+
 $("#deletePostButton").click((e) => {
   var id = $(e.target).data("id")
 
@@ -89,7 +135,6 @@ $("#deletePostButton").click((e) => {
       location.reload()
     }
   })
-
 })
 
 $("#filePhoto").change(e => {
@@ -370,6 +415,23 @@ function outputPosts(results, container) {
   }
 }
 
+function outputPinnedPost(results, container) {
+
+  if(results.length === 0) {
+    container.hide();
+    return;
+  }
+
+  container.html("")
+
+  results.forEach(r => {
+    var html = createPostHtml(r)
+    container.append(html)
+  });
+
+
+}
+
 
 function createPostHtml(postData, largeFont = false) {
 
@@ -413,10 +475,21 @@ function createPostHtml(postData, largeFont = false) {
   }
 
   var buttons = "";
+  var pinnedPostText = "";
 
-  if(postData.postedBy. _id == userLoggedIn._id) {
+  if(postData.postedBy._id == userLoggedIn._id) {
+
+    var pinnedClass = "";
+    var dataTarget = "#confirmPinModal";
+
+    if(postData.pinned === true) {
+      pinnedClass = "active";
+      dataTarget = "#unpinModal"
+      pinnedPostText = "<i class='fas fa-thumbtack'></i> <span>Pinned Post</span>";
+    }
+
     buttons = `
-      <button data-id='${postData._id}' data-toggle='modal' data-target='#confirmPinModal'>
+      <button class='pinButton ${pinnedClass}' data-id='${postData._id}' data-toggle='modal' data-target='${dataTarget}'>
         <i class='fas fa-thumbtack'> </i>
       </button>
 
@@ -436,6 +509,9 @@ function createPostHtml(postData, largeFont = false) {
           <img src='${postedBy.profilePic}'/>
         </div>
         <div class='postContentContainer'>
+          <div class='pinnedPostText'>
+            ${pinnedPostText}
+          </div>
           <div class='header'>
             <a href="/profile/${postedBy.username}" class="displayName">
               ${displayName}
