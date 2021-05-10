@@ -13,10 +13,22 @@ router.get("/", async (req, res, next) => {
     delete searchObj.isReply;
   }
 
-
   if(searchObj.isReply !== undefined && searchObj.isReply === 'true') {
     searchObj.replyTo = { $exists: true }; // mongoDB operator $exists
     delete searchObj.isReply;
+  }
+
+  if(searchObj.followingOnly !== undefined && searchObj.followingOnly === 'true') {
+
+    var objectIds = [...req.session.user.following];
+    objectIds.push(req.session.user._id)
+
+    searchObj.postedBy = { $in: objectIds };
+    delete searchObj.followingOnly;
+  }
+
+  if(searchObj.followingOnly !== undefined && searchObj.followingOnly === 'false') {
+    delete searchObj.followingOnly;
   }
 
 
