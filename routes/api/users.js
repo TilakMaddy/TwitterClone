@@ -37,4 +37,28 @@ router.put("/:userId/follow", async (req, res, next) => {
 
 })
 
+router.get("/:userId/following", async (req, res, next) => {
+
+  var userId = req.params.userId;
+  var user = await User.findById(userId).populate("following")
+
+  if(user == null)
+    return res.sendStatus(404);
+
+  res.status(200).send(user);
+})
+
+
+router.get("/:userId/followers", async (req, res, next) => {
+
+  var userId = req.params.userId;
+  var user = await User.findById(userId).populate("followers")
+
+  if(user == null)
+    return res.sendStatus(404);
+
+  res.status(200).send(user);
+})
+
+
 module.exports = router;

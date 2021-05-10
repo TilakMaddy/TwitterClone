@@ -41,6 +41,26 @@ router.get('/:uname/replies', async (req, res, next) => {
 
 })
 
+router.get('/:uname/following', async (req, res, next) => {
+
+  var payload = await getPayload(req.params.uname, req.session.user)
+  payload.selectedTab = "following";
+
+  res.status(200)
+    .render("followersAndFollowing", payload);
+
+})
+
+router.get('/:uname/followers', async (req, res, next) => {
+
+  var payload = await getPayload(req.params.uname, req.session.user)
+  payload.selectedTab = "followers";
+
+  res.status(200)
+    .render("followersAndFollowing", payload);
+
+})
+
 
 async function getPayload(username, userLoggedIn) {
 
