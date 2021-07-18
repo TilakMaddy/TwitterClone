@@ -1,4 +1,4 @@
-var timer;
+// var timer; => included in common.js
 
 
 $("#searchBox").keydown((e) => {
