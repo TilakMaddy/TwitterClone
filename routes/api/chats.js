@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 
 var Chat = require('../../schemas/ChatSchema');
+const MessageSchema = require('../../schemas/MessageSchema');
+const User = require('../../schemas/UserSchema');
 
 router.post("/", async (req, res, next) => {
 
@@ -39,8 +41,13 @@ router.post("/", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   Chat.find({ users: { $elemMatch: { $eq: req.session.user._id }}})
   .populate("users")
+  .populate("latestMessage")
+
   .sort({updatedAt: -1})
-  .then(results => res.status(200).send(results))
+  .then(async (results) => {
+    results = await User.populate(results, "latestMessage.sender");
+    res.status(200).send(results);
+  })
   .catch(error => {
     console.log(error);
     res.sendStatus(400);
@@ -70,6 +77,18 @@ router.put("/:chatId", async (req, res, next) => {
   })
 });
 
+
+router.get("/:chatId/messages", async (req, res, next) => {
+
+  MessageSchema.find({ chat: req.params.chatId })
+  .populate("sender")
+  .then(results => res.status(200).send(results))
+  .catch(error => {
+    console.log(error);
+    res.sendStatus(400);
+  })
+
+});
 
 module.exports = router;
 

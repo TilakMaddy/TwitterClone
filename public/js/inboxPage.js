@@ -27,7 +27,7 @@ function createChatHtml(chat) {
 
   var chatName = getChatName(chat);
   var image = getChatImageElements(chat);
-  var latestMessage = 'thi is latest message';
+  var latestMessage = getLatestMessage(chat.latestMessage);
 
   return `
     <a class='resultListItem' href='/messages/${chat._id}'>
@@ -40,6 +40,16 @@ function createChatHtml(chat) {
   `;
 }
 
+function getLatestMessage(latestMessage) {
+
+  if(latestMessage != null) {
+    var sender = latestMessage.sender;
+    return `${sender.firstName} ${sender.lastName}: ${latestMessage.content}`;
+  }
+
+  return 'New chat';
+
+}
 
 function getChatImageElements(chatData) {
   var otherChatUsers = getOtherChatUsers(chatData.users);
