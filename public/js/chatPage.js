@@ -7,14 +7,29 @@ $(document).ready(() => {
 
   $.get("/api/chats/" + chatId  + "/messages/", (data) => {
     var messages = [];
-    data.forEach(msg => {
-      var html = createMessageHtml(msg);
+    var lastSenderId = "";
+
+    data.forEach((msg, i) => {
+      var html = createMessageHtml(msg, data[i + 1], lastSenderId);
       messages.push(html);
+
+      lastSenderId = msg.sender._id;
+
     });
+
     var messagesHtml = messages.join("");
+
+    addMessagesHtmlToPage(messagesHtml);
+    scrollToBottom(false);
   });
 
 });
+
+function addMessagesHtmlToPage(html) {
+
+  $('.chatMessages').append(html);
+
+}
 
 $('#chatNameButton').click(() => {
 
@@ -43,8 +58,6 @@ $(".inputTextbox").on("keydown", (e) => {
     messageSubmitted();
     return false; // dont do the regular behaviour
   }
-
-
 
 });
 
@@ -86,25 +99,74 @@ function addChatMessageHtml(message) {
     return;
   }
 
-  var messageDiv = createMessageHtml(message);
+  var messageDiv = createMessageHtml(message, null, "");
 
-  $('.chatMessages').append(messageDiv);
-
+  addMessagesHtmlToPage(messageDiv);
+  scrollToBottom(true);
 }
 
-function  createMessageHtml(message) {
+function  createMessageHtml(message, nextMessage, lastSenderId) {
+
+  var sender = message.sender;
+  var senderName = sender.firstName + ' ' + sender.lastName;
+  var currentSenderId = sender._id;
+  var nextSenderId = nextMessage  != null ? nextMessage.sender._id : "";
+
+  var isFirst = lastSenderId != currentSenderId;
+  var isLast = nextSenderId != currentSenderId;
+
 
   var isMine = message.sender._id == userLoggedIn._id;
   var licClassName = isMine ? 'mine' : 'theirs';
 
+  var nameElement = "";
+
+  if(isFirst) {
+    licClassName += ' first';
+    if(!isMine) {
+      nameElement = `<span class='senderName'> ${senderName} </span>`;
+    }
+  }
+
+  var profileImage = "";
+
+  if(isLast) {
+    licClassName += ' last';
+    profileImage = `<img src='${sender.profilePic}' />`
+  }
+
+  var imageContainer = "";
+
+  if(!isMine) {
+    imageContainer = `
+      <div class='imageContainer'>
+        ${profileImage}
+      </div>
+    `;
+  }
+
   return `
   <li class='message ${licClassName}'>
+    ${imageContainer}
     <div class='messageContainer'>
+      ${nameElement}
       <span class='messageBody'>
         ${message.content}
       </span>
     </div>
   </li>
   `;
+
+}
+
+function scrollToBottom(animated) {
+  var container = $(".chatMessages");
+  var scrollHeight = container[0].scrollHeight;
+
+  if(animated) {
+    container.animate({ scrollTop: scrollHeight }, "slow");
+  } else {
+    container.scrollTop(scrollHeight);
+  }
 
 }
