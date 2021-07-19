@@ -603,7 +603,7 @@ button span {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .chatContainer .footer {
@@ -626,4 +626,47 @@ button span {
   background: transparent;
   color: var(--blue);
   font-size: 24px;
+}
+
+.chatMessages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing);
+  overflow-y: auto;
+}
+
+.chatImagesContainer {
+  display: flex;
+  flex-direction: row-reverse;
+  height: 100%;
+  margin-right: 10px;
+}
+
+.chatImagesContainer img {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+}
+
+.chatImagesContainer .userCount {
+  height: 40px;
+  width: 40px;
+  background: #f1f1f1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  border: 3px solid #fff;
+}
+
+.chatImagesContainer img:not(:last-child),
+.chatImagesContainer .userCount{
+  margin-left: -10px;
+}
+
+#chatNameTextbox {
+  width: 100%;
 }

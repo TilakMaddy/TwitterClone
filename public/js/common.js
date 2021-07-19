@@ -293,6 +293,24 @@ $("#createChatButton").click(() => {
   });
 });
 
+function getChatName(chatData) {
+  var chatName = chatData.chatName;
+
+  if(!chatName) {
+    var otherChatUsers = getOtherChatUsers(chatData.users);
+    var namesArray = otherChatUsers.map(u => u.firstName + " " + u.lastName)
+    chatName = namesArray.join(", ");
+  }
+
+  return chatName;
+}
+
+function getOtherChatUsers(users) {
+
+  if(users.length == 1) return users;
+
+  return users.filter(u => u._id != userLoggedIn._id);
+}
 $(document).on('click', '.likeButton', e => {
 
   var button = $(e.target);

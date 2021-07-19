@@ -39,12 +39,37 @@ router.post("/", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   Chat.find({ users: { $elemMatch: { $eq: req.session.user._id }}})
   .populate("users")
+  .sort({updatedAt: -1})
   .then(results => res.status(200).send(results))
   .catch(error => {
     console.log(error);
     res.sendStatus(400);
   })
 });
+
+router.get("/:chatId", async (req, res, next) => {
+
+  // we dont use findById because we wanna verify that this user is definitely a partof this chat
+
+  Chat.findOne({_id: req.params.chatId, users: { $elemMatch: { $eq: req.session.user._id }}})
+  .populate("users")
+  .then(results => res.status(200).send(results))
+  .catch(error => {
+    console.log(error);
+    res.sendStatus(400);
+  })
+
+});
+
+router.put("/:chatId", async (req, res, next) => {
+  Chat.findByIdAndUpdate(req.params.chatId, req.body)
+  .then(_ => res.sendStatus(204))
+  .catch(error => {
+    console.log(error);
+    res.sendStatus(400);
+  })
+});
+
 
 module.exports = router;
 
