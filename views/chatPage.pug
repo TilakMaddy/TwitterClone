@@ -13,8 +13,12 @@ block content
         span#chatName(data-toggle="modal", data-target="#chatNameModal") ...
 
       .mainContentContainer
-        .chatContainer
+        .loadingSpinnerContainer
+          img(src="https://miro.medium.com/max/882/1*9EBHIOzhE1XfMYoKz1JcsQ.gif", alt="loading")
+        .chatContainer(style="visibility: hidden")
           ul.chatMessages
+          .typingDots
+            img(src="/images/dots_2.gif", alt="typing dots")
           .footer
             textarea.inputTextbox(name="messageInput", placeholder="Type a message ...")
             button.sendMessageButton
