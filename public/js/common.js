@@ -755,3 +755,33 @@ function messageReceived(newMessage) {
   }
 
 }
+
+function markNotificationsAsOpened(id = null,  callback = window.location.reload) {
+
+  var url = id != null ? '/api/notifications/'+id+'/markAsOpened'
+                       : '/api/notifications/markAsOpened';
+
+
+  console.log(url + " put");
+  $.ajax({
+    url,
+    type: "PUT",
+    success: callback
+  });
+
+}
+
+$(document).on("click", ".active", (e) => {
+
+
+  var container = $(e.target);
+  var notificationId = container.data().id;
+
+  var href = container.attr("href");
+  e.preventDefault();
+
+  var callback = () => window.location = href;
+
+  markNotificationsAsOpened(notificationId, callback);
+
+});

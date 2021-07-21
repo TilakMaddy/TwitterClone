@@ -792,3 +792,10 @@ button span {
   max-width: 175px;
 }
 
+.resultListItem.active {
+  background-color: var(--blueBackground);
+}
+
+.resultListItem.notification * {
+  pointer-events: none;
+}
