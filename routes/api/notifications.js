@@ -6,9 +6,33 @@ const User = require('../../schemas/UserSchema');
 const Notification = require('../../schemas/NotificationSchema');
 
 router.get("/", async (req, res, next) => {
-  console.log('get all notifications')
+
+  var searchObj = { userTo: req.session.user._id, notificationType: { $ne: "message"} };
+
+  if(req.query.unreadOnly !== undefined && req.query.unreadOnly == "true") {
+    searchObj.opened = false;
+  }
+
   Notification
-  .find({ userTo: req.session.user._id, notificationType: { $ne: "message"} })
+  .find(searchObj)
+  .populate("userTo")
+  .populate("userFrom")
+  .sort({createdAt: -1})
+  .then(result => {
+    res.status(200).send(result)
+  })
+  .catch(err => {
+    console.log(err);
+    res.sendStatus(400);
+  });
+
+});
+
+
+router.get("/latest", async (req, res, next) => {
+
+  Notification
+  .findOne({ userTo: req.session.user._id })
   .populate("userTo")
   .populate("userFrom")
   .sort({createdAt: -1})

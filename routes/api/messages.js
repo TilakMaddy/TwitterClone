@@ -50,6 +50,7 @@ function insertNotif(chat, message) {
     if(userId == message.sender._id.toString())
       return;
 
+
     Notification.insertNotification(userId, message.sender._id, "message", message.chat._id);
 
   });

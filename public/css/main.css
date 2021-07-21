@@ -47,7 +47,7 @@ nav {
 }
 
 nav a {
-
+  position: relative;
   display: grid;
   place-items: center;
   padding: 10px;
@@ -798,4 +798,40 @@ button span {
 
 .resultListItem.notification * {
   pointer-events: none;
+}
+
+#nbadge, #mbadge {
+  background-color: var(--red);
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+}
+
+#nbadge.active, #mbadge.active {
+  visibility: visible;
+}
+
+#notificationList {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  width: 350px;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+
+}
+
+#notificationList .active {
+  background: white;
 }
