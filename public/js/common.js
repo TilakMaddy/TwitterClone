@@ -757,7 +757,7 @@ function updateSelectedUsersHtml() {
 
 function messageReceived(newMessage) {
 
-  if($(".chatContainer").length == 0) {
+  if($(`[data-room="${newMessage.chat._id}"]`).length == 0) {
     // we are not in the chat page
     // show popup notification
 
@@ -964,8 +964,10 @@ function createChatHtml(chat) {
   var image = getChatImageElements(chat);
   var latestMessage = getLatestMessage(chat.latestMessage);
 
+  var activeClass = chat.latestMessage?.readBy.includes(userLoggedIn._id) ? '': 'active';
+
   return `
-    <a class='resultListItem' href='/messages/${chat._id}'>
+    <a class='resultListItem ${activeClass}' href='/messages/${chat._id}'>
       ${image}
       <div class='resultsDetailsContainer ellipsis'>
         <span class='heading ellipsis'>${chatName}</span>
