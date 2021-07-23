@@ -1,6 +1,6 @@
 var connected = false;
 
-var socket = io("http://127.0.0.1");
+var socket = io("https://twitter-in-nodejs.herokuapp.com/");
 
 socket.emit('setup', userLoggedIn);
 
